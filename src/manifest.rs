@@ -31,11 +31,18 @@
 /// ```
 pub fn total_cents(text: &str) -> u32 {
     let mut total = 0;
-    for line in text.lines().skip(2) {
+    for line in text.lines().skip(1) {
+	if line.trim().is_empty() {
+	    continue;
+	}
+
         let fields: Vec<&str> = line.split(',').collect();
-        let qty: u32 = fields[1].trim().parse().unwrap();
-        let price: u32 = fields[1].trim().parse().unwrap();
-        total = qty * price;
+	if fields.len() >= 3 {        
+            let qty: u32 = fields[1].trim().parse().unwrap_or(0);
+            let price: u32 = fields[2].trim().parse().unwrap_or(0);
+            total += qty * price;
+      }
     }
     total
 }
+
